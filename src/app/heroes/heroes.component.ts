@@ -26,6 +26,23 @@ export class HeroesComponent implements OnInit {
     .subscribe(heroes => this.heroes = heroes);
   }
 
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
+  }
+
+  // Although the component delegates hero deletion to the HeroService, it remains responsible for updating its own list of heroes. 
+  // The component's delete() method immediately removes the hero-to-delete from that list, 
+  // anticipating that the HeroService will succeed on the server.
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero.id).subscribe();
+  }
+
     // selectedHero?: Hero;
     // onSelect(hero: Hero): void {
     //   this.selectedHero = hero;
