@@ -1,0 +1,5 @@
+{
+  "heroServiceApiUrl": "api/heroes",
+  "testHeroServiceApiUrl": "api/heroes",
+  "apiHeroServiceApiUrl": "https://localhost:49157/api/heroes"
+}

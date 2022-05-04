@@ -5,13 +5,14 @@ import { Observable, of } from 'rxjs';
 import { MessageService } from './messages.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AppConfigService } from './services/app-config-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
 
-  private heroesUrl = 'api/heroes';  // URL to web api
+  private heroesUrl = this.appConfigService.heroServiceApiUrl;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,7 +20,8 @@ export class HeroService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private appConfigService: AppConfigService) { }
 
   getHeroes(): Observable<Hero[]> {
     // const heros = of(HEROES);
@@ -59,7 +61,8 @@ export class HeroService {
 
     /** PUT: update the hero on the server */
   updateHero(hero: Hero): Observable<any> {
-    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+    const url = `${this.heroesUrl}/${hero.id}`;
+    return this.http.put(url, hero, this.httpOptions).pipe(
       tap(_ => this.log(`updated hero id=${hero.id}`)),
       catchError(this.handleError<any>('updateHero'))
     );
